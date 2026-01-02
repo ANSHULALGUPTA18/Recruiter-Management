@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { SlidersHorizontal, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
+import { SlidersHorizontal, Plus, Trash2 } from 'lucide-react';
 import { Task } from '../../constants/types';
 import { taskApi } from '../../services/api';
 import { useApi } from '../../hooks/useApi';
@@ -52,25 +52,10 @@ export default function Sidebar() {
   return (
     <aside className="w-[280px] lg:w-[320px] bg-white h-[calc(100vh-65px)] flex flex-col border-r border-gray-200">
       {/* Header */}
-      <div className="p-4 flex items-center justify-between border-b border-gray-100">
+      <div className="p-4 flex items-center border-b border-gray-100">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="w-5 h-5 text-gray-500" />
           <h2 className="text-base font-semibold text-gray-900">To Do list</h2>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
-            aria-label="More options"
-          >
-            <MoreHorizontal className="w-5 h-5" />
-          </button>
-          <button
-            className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
-            aria-label="Add task"
-            onClick={() => document.getElementById('new-task-input')?.focus()}
-          >
-            <Plus className="w-5 h-5" />
-          </button>
         </div>
       </div>
 

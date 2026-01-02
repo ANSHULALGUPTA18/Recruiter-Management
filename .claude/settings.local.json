@@ -8,7 +8,10 @@
       "Bash(curl:*)",
       "Bash(copy:*)",
       "Bash(copy \"C:\\\\Users\\\\anshu\\\\OneDrive\\\\Desktop\\\\unified\\\\*.png\" \"C:\\\\Users\\\\anshu\\\\OneDrive\\\\Desktop\\\\unified\\\\frontend\\\\src\\\\assets\"\" 2>nul || echo \"Looking for logo... \")",
-      "Bash(git remote add:*)"
+      "Bash(git remote add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: Unified Workspace Dashboard\n\nFeatures:\n- React + Vite + TypeScript frontend\n- Node.js + Express + TypeScript backend\n- Tailwind CSS styling\n- Navbar with dropdowns \\(Legal Compliance, Resume Suite, Outreach, Analytics\\)\n- To-Do list sidebar with add/delete functionality\n- Jobs section with Active Jobs, Job Matchings, Expiring Jobs cards\n- Quick Links section with add/delete functionality\n- External links to deployed services \\(Legal Compliance, Resume Formatter, Referrals\\)\n- User profile dropdown\n- Responsive layout\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
     ]
   }
 }
