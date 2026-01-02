@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm run dev)",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "Bash(curl:*)",
+      "Bash(copy:*)",
+      "Bash(copy \"C:\\\\Users\\\\anshu\\\\OneDrive\\\\Desktop\\\\unified\\\\*.png\" \"C:\\\\Users\\\\anshu\\\\OneDrive\\\\Desktop\\\\unified\\\\frontend\\\\src\\\\assets\"\" 2>nul || echo \"Looking for logo... \")",
+      "Bash(git remote add:*)"
+    ]
+  }
+}
