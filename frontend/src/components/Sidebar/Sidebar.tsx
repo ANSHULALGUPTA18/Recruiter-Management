@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { SlidersHorizontal, Plus, Trash2 } from 'lucide-react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { SlidersHorizontal, Plus, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { Task } from '../../constants/types';
 import { taskApi } from '../../services/api';
 import { useApi } from '../../hooks/useApi';
@@ -7,9 +7,24 @@ import { useApi } from '../../hooks/useApi';
 export default function Sidebar() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState('');
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const fetchTasks = useCallback(() => taskApi.getAll(), []);
   const { data: tasks, loading, refetch } = useApi<Task[]>(fetchTasks, []);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleToggleTask = async (task: Task) => {
     try {

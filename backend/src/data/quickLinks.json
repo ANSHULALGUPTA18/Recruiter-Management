@@ -1,0 +1,19 @@
+{
+  "nextId": 8,
+  "quickLinks": [
+    {
+      "id": 1,
+      "name": "Legal Compliance",
+      "route": "https://frontend.reddesert-f6724e64.centralus.azurecontainerapps.io",
+      "icon": "FileText",
+      "isExternal": true
+    },
+    {
+      "id": 2,
+      "name": "Resume Formatter",
+      "route": "https://resume-formatter.reddesert-f6724e64.centralus.azurecontainerapps.io/",
+      "icon": "FileCheck",
+      "isExternal": true
+    }
+  ]
+}

@@ -26,7 +26,8 @@ export default function QuickLinkCard({
         className="bg-blue-50 border border-blue-200 rounded-lg p-6 flex flex-col items-center justify-center min-h-[140px] hover:bg-blue-100 transition-colors cursor-pointer"
         aria-label="Add new quick link"
       >
-        <Plus className="w-10 h-10 text-primary-500" strokeWidth={1.5} />
+        <Plus className="w-10 h-10 text-primary-500 mb-2" strokeWidth={1.5} />
+        <span className="text-sm font-medium text-primary-500">{label}</span>
       </button>
     );
   }

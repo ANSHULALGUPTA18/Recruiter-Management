@@ -1,40 +1,62 @@
+import fs from 'fs';
+import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../models/types';
 
-let tasks: Task[] = [
-  { id: uuidv4(), title: 'Task 1', completed: false, createdAt: new Date() },
-  { id: uuidv4(), title: 'Task 2', completed: false, createdAt: new Date() },
-  { id: uuidv4(), title: 'Task 3', completed: false, createdAt: new Date() },
-  { id: uuidv4(), title: 'Task 4', completed: false, createdAt: new Date() },
-  { id: uuidv4(), title: 'Task 5', completed: false, createdAt: new Date() },
-  { id: uuidv4(), title: 'Task 6', completed: false, createdAt: new Date() }
-];
+interface TaskData {
+  tasks: Task[];
+}
+
+const DATA_FILE = path.join(__dirname, '../data/tasks.json');
+
+const readData = (): TaskData => {
+  try {
+    const data = fs.readFileSync(DATA_FILE, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    return { tasks: [] };
+  }
+};
+
+const writeData = (data: TaskData): void => {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+};
 
 export const getAllTasks = (): Task[] => {
-  return tasks;
+  const data = readData();
+  return data.tasks;
 };
 
 export const createTask = (title: string): Task => {
+  const data = readData();
   const newTask: Task = {
     id: uuidv4(),
     title,
     completed: false,
     createdAt: new Date()
   };
-  tasks.push(newTask);
+  data.tasks.push(newTask);
+  writeData(data);
   return newTask;
 };
 
 export const updateTask = (id: string, updates: Partial<Task>): Task | null => {
-  const taskIndex = tasks.findIndex(t => t.id === id);
+  const data = readData();
+  const taskIndex = data.tasks.findIndex(t => t.id === id);
   if (taskIndex === -1) return null;
 
-  tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
-  return tasks[taskIndex];
+  data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...updates };
+  writeData(data);
+  return data.tasks[taskIndex];
 };
 
 export const deleteTask = (id: string): boolean => {
-  const initialLength = tasks.length;
-  tasks = tasks.filter(t => t.id !== id);
-  return tasks.length < initialLength;
+  const data = readData();
+  const initialLength = data.tasks.length;
+  data.tasks = data.tasks.filter(t => t.id !== id);
+  if (data.tasks.length < initialLength) {
+    writeData(data);
+    return true;
+  }
+  return false;
 };

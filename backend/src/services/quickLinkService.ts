@@ -1,32 +1,57 @@
+import fs from 'fs';
+import path from 'path';
 import { QuickLink } from '../models/types';
 
-let quickLinks: QuickLink[] = [
-  { id: 1, name: 'Legal Compliance', route: 'https://frontend.reddesert-f6724e64.centralus.azurecontainerapps.io', icon: 'FileText', isExternal: true },
-  { id: 2, name: 'Resume Formatter', route: 'https://resume-formatter.reddesert-f6724e64.centralus.azurecontainerapps.io/', icon: 'FileCheck', isExternal: true },
-  { id: 3, name: 'Resume Formatter', route: 'https://resume-formatter.reddesert-f6724e64.centralus.azurecontainerapps.io/', icon: 'FileCheck', isExternal: true },
-  { id: 4, name: 'Resume Formatter', route: 'https://resume-formatter.reddesert-f6724e64.centralus.azurecontainerapps.io/', icon: 'FileCheck', isExternal: true }
-];
+interface QuickLinkData {
+  nextId: number;
+  quickLinks: QuickLink[];
+}
 
-let nextId = 5;
+const DATA_FILE = path.join(__dirname, '../data/quickLinks.json');
+
+const readData = (): QuickLinkData => {
+  try {
+    const data = fs.readFileSync(DATA_FILE, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    return {
+      nextId: 1,
+      quickLinks: []
+    };
+  }
+};
+
+const writeData = (data: QuickLinkData): void => {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+};
 
 export const getQuickLinks = (): QuickLink[] => {
-  return quickLinks;
+  const data = readData();
+  return data.quickLinks;
 };
 
 export const createQuickLink = (name: string, route: string): QuickLink => {
+  const data = readData();
   const newLink: QuickLink = {
-    id: nextId++,
+    id: data.nextId,
     name,
     route,
     icon: 'FileText',
     isExternal: true
   };
-  quickLinks.push(newLink);
+  data.quickLinks.push(newLink);
+  data.nextId++;
+  writeData(data);
   return newLink;
 };
 
 export const deleteQuickLink = (id: number): boolean => {
-  const initialLength = quickLinks.length;
-  quickLinks = quickLinks.filter(link => link.id !== id);
-  return quickLinks.length < initialLength;
+  const data = readData();
+  const initialLength = data.quickLinks.length;
+  data.quickLinks = data.quickLinks.filter(link => link.id !== id);
+  if (data.quickLinks.length < initialLength) {
+    writeData(data);
+    return true;
+  }
+  return false;
 };
