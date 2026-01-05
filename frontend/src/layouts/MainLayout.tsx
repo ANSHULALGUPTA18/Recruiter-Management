@@ -16,7 +16,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       <div className="flex pt-[65px] overflow-hidden">
         {/* Left control area - dynamically sized based on sidebar state */}
-        <div className={`flex-shrink-0 transition-all duration-300 ease-in-out relative ${isSidebarOpen ? 'w-[280px] lg:w-[300px]' : 'w-16'}`}>
+        <div className={`flex-shrink-0 bg-white transition-all duration-300 ease-in-out relative ${isSidebarOpen ? 'w-[280px] lg:w-[300px]' : 'w-16'}`}>
           {/* Sidebar - part of normal flow */}
           <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
           
