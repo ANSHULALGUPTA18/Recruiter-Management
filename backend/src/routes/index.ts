@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
 import taskRoutes from './taskRoutes';
 import jobRoutes from './jobRoutes';
@@ -6,6 +7,7 @@ import quickLinkRoutes from './quickLinkRoutes';
 
 const router = Router();
 
+router.use('/auth', authRoutes);
 router.use('/user', userRoutes);
 router.use('/tasks', taskRoutes);
 router.use('/jobs', jobRoutes);

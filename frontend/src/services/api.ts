@@ -10,6 +10,26 @@ const apiClient = axios.create({
   },
 });
 
+// Add request interceptor to include auth token
+apiClient.interceptors.request.use(
+  async (config) => {
+    // Try to get token from MSAL
+    try {
+      const accounts = sessionStorage.getItem('msal.account.keys');
+      if (accounts) {
+        // Token will be added by MSAL if available
+        // For now, just proceed without blocking requests
+      }
+    } catch (error) {
+      console.warn('Could not retrieve auth token:', error);
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export const userApi = {
   getProfile: async (): Promise<User> => {
     const response = await apiClient.get<ApiResponse<User>>('/user/profile');

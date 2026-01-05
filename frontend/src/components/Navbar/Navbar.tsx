@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import UserDropdown from '../UserDropdown/UserDropdown';
+import { useSSONavigation } from '../../hooks/useSSONavigation';
 
 interface DropdownItem {
   label: string;
@@ -44,6 +45,7 @@ const navItems: NavItem[] = [
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const { navigateWithSSO } = useSSONavigation();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,6 +65,14 @@ export default function Navbar() {
     setOpenDropdown(openDropdown === label ? null : label);
   };
 
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal?: boolean) => {
+    if (isExternal) {
+      e.preventDefault();
+      navigateWithSSO(href);
+      setOpenDropdown(null);
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 h-[65px] bg-primary-500 z-50 shadow-md">
       <div className="h-full px-4 lg:px-6 flex items-center justify-between">
@@ -74,7 +84,7 @@ export default function Navbar() {
             className="w-14 h-14 object-contain"
           />
           <div className="flex flex-col">
-            <span className="text-white text-xl font-bold leading-tight">Unified Workspace</span>
+            <span className="text-white text-xl font-bold leading-tight">Recruiter Suite</span>
             <span className="text-white/70 text-xs leading-tight">powered by Techgene</span>
           </div>
         </div>
@@ -120,6 +130,7 @@ export default function Navbar() {
                           <a
                             key={dropdownItem.label}
                             href={dropdownItem.href}
+                            onClick={(e) => handleNavigation(e, dropdownItem.href, dropdownItem.isExternal)}
                             target={dropdownItem.isExternal ? '_blank' : undefined}
                             rel={dropdownItem.isExternal ? 'noopener noreferrer' : undefined}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -134,6 +145,7 @@ export default function Navbar() {
               ) : (
                 <a
                   href={item.href}
+                  onClick={(e) => handleNavigation(e, item.href, item.isExternal)}
                   target={item.isExternal ? '_blank' : undefined}
                   rel={item.isExternal ? 'noopener noreferrer' : undefined}
                   className="px-3 py-2 text-white text-sm font-medium hover:bg-white/10 rounded-md transition-colors"
@@ -147,7 +159,7 @@ export default function Navbar() {
 
         {/* Right Section - Profile */}
         <div className="flex items-center flex-shrink-0">
-          <UserDropdown name="Anshu Lal Gupta" email="anshu@techgene.com" />
+          <UserDropdown />
         </div>
       </div>
     </nav>

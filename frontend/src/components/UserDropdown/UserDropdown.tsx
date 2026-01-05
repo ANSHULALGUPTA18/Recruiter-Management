@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { LogOut, User } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
-interface UserDropdownProps {
-  name: string;
-  email: string;
-}
-
-export default function UserDropdown({ name, email }: UserDropdownProps) {
+export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user, logout } = useAuth();
+
+  const name = user?.name || 'User';
+  const email = user?.username || '';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -21,9 +21,13 @@ export default function UserDropdown({ name, email }: UserDropdownProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    console.log('Logout clicked');
-    setIsOpen(false);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsOpen(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (

@@ -1,7 +1,15 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { MsalProvider } from '@azure/msal-react';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { msalConfig } from './config/authConfig';
+import { AuthProvider } from './contexts/AuthContext';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Initialize MSAL instance
+const msalInstance = new PublicClientApplication(msalConfig);
 
 function RedirectOnRefresh({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -18,21 +26,27 @@ function RedirectOnRefresh({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <Router>
-      <RedirectOnRefresh>
-        <MainLayout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/legal" element={<PlaceholderPage title="Legal Compliance" />} />
-            <Route path="/resume/*" element={<PlaceholderPage title="Resume Suite" />} />
-            <Route path="/outreach/*" element={<PlaceholderPage title="Outreach" />} />
-            <Route path="/analytics" element={<PlaceholderPage title="Analytics" />} />
-            <Route path="/jobs/*" element={<PlaceholderPage title="Jobs" />} />
-          </Routes>
-        </MainLayout>
-      </RedirectOnRefresh>
-    </Router>
+    <MsalProvider instance={msalInstance}>
+      <AuthProvider>
+        <Router>
+          <RedirectOnRefresh>
+            <ProtectedRoute>
+              <MainLayout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/legal" element={<PlaceholderPage title="Legal Compliance" />} />
+                  <Route path="/resume/*" element={<PlaceholderPage title="Resume Suite" />} />
+                  <Route path="/outreach/*" element={<PlaceholderPage title="Outreach" />} />
+                  <Route path="/analytics" element={<PlaceholderPage title="Analytics" />} />
+                  <Route path="/jobs/*" element={<PlaceholderPage title="Jobs" />} />
+                </Routes>
+              </MainLayout>
+            </ProtectedRoute>
+          </RedirectOnRefresh>
+        </Router>
+      </AuthProvider>
+    </MsalProvider>
   );
 }
 
